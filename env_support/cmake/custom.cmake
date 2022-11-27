@@ -25,7 +25,18 @@ add_library(lvgl::lvgl ALIAS lvgl)
 
 target_compile_definitions(
   lvgl PUBLIC $<$<BOOL:${LV_LVGL_H_INCLUDE_SIMPLE}>:LV_LVGL_H_INCLUDE_SIMPLE>
-              $<$<BOOL:${LV_CONF_INCLUDE_SIMPLE}>:LV_CONF_INCLUDE_SIMPLE>)
+              $<$<BOOL:${LV_CONF_INCLUDE_SIMPLE}>:LV_CONF_INCLUDE_SIMPLE>
+              noexcept=)
+
+target_compile_options(lvgl PUBLIC
+  -mcpu=cortex-m0plus -mthumb -nostdlib
+  -fno-exceptions
+  -Os
+  -ffunction-sections
+  -fdata-sections
+  $<$<COMPILE_LANGUAGE:CXX>:-fno-threadsafe-statics>
+  $<$<COMPILE_LANGUAGE:CXX>:-fno-rtti>
+  )
 
 # Add definition of LV_CONF_PATH only if needed
 if(LV_CONF_PATH)
